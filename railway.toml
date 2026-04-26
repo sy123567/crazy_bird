@@ -1,0 +1,6 @@
+[railway]
+  plugin = "docker"
+
+[docker]
+  Dockerfile = "Dockerfile"
+  context = "."

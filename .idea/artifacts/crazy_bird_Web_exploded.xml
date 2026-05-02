@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="crazy_bird:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/crazy_bird_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="crazy_bird/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="crazy_bird" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

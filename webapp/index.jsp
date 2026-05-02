@@ -13,26 +13,36 @@
         <div class="hero-copy">
             <span class="eyebrow">JSP Canvas Arcade</span>
             <h1>愤怒的小鸟</h1>
-            <p class="subtitle">升级后的 Crazy Bird Deluxe 加入多关卡战役、五种鸟类专属技能、木石玻璃材质结构、连击得分和实时音效反馈。拖拽弹弓发射，飞行中抓准时机释放技能，击溃猪堡。</p>
+            <p class="subtitle">升级后的 Crazy Bird Deluxe 加入百关战役、二十五种鸟类专属技能、木石玻璃材质结构、连击得分和实时音效反馈。拖拽弹弓发射，飞行中抓准时机释放技能，击溃猪堡。</p>
         </div>
         <div class="hero-actions">
             <button id="startBtn" class="primary-btn" type="button">开始游戏</button>
             <button id="skillBtn" class="tertiary-btn" type="button" disabled>释放技能</button>
-            <button id="soundToggle" class="ghost-btn" type="button" aria-pressed="true">音效：开</button>
+            <button id="aimToggle" class="ghost-btn" type="button" aria-pressed="true">瞄准预览：开</button>
+            <button id="soundToggle" class="ghost-btn" type="button" aria-pressed="true">音效/音乐：开</button>
+            <button id="fullscreenBtn" class="ghost-btn fullscreen-btn" type="button">全屏模式</button>
             <button id="resetBtn" class="secondary-btn" type="button">重新开始</button>
         </div>
     </header>
 
     <main class="game-layout">
         <section class="game-stage-card">
-            <canvas id="gameCanvas" width="960" height="540"></canvas>
-            <div class="hint-bar">
-                <span>操作：鼠标拖拽蓄力，松手发射</span>
-                <span>技能：空格或“释放技能”按钮</span>
-                <span>材质：木质易碎，石质耐撞，玻璃脆但弹性高</span>
-                <span>目标：逐关清空所有小猪并保留更多小鸟</span>
+            <div class="stage-toolbar">
+                <label class="level-picker" for="levelSelect">
+                    <span>选择关卡</span>
+                    <select id="levelSelect"></select>
+                </label>
+                <button id="levelStartBtn" class="mini-btn" type="button">开始本关</button>
+                <button id="stageSkillBtn" class="mini-btn skill-mini" type="button" disabled>触屏技能</button>
             </div>
-            <div class="bird-library">
+            <canvas id="gameCanvas" width="1280" height="720"></canvas>
+            <div class="hint-bar">
+                <span>电脑：拖拽发射，空格/点击画面/按钮放技能，自动播放背景音乐</span>
+                <span>手机：滑动屏幕拉动，飞行中点按画面放技能</span>
+                <span>关卡：默认可选择100关任意挑战</span>
+                <span>全屏：手机横屏游玩更舒适</span>
+            </div>
+            <div id="birdLibrary" class="bird-library">
                 <article class="bird-chip red">
                     <strong>赤焰鸟</strong>
                     <span>突进冲锋，强化正面撞击</span>
@@ -69,7 +79,7 @@
                 </div>
                 <div class="stat-card">
                     <span class="label">剩余小鸟</span>
-                    <strong id="birdsValue">4</strong>
+                    <strong id="birdsValue">0</strong>
                 </div>
                 <div class="stat-card">
                     <span class="label">剩余小猪</span>
@@ -81,7 +91,7 @@
                 </div>
                 <div class="stat-card">
                     <span class="label">关卡</span>
-                    <strong id="levelValue">1/3</strong>
+                    <strong id="levelValue">1/100</strong>
                 </div>
                 <div class="stat-card">
                     <span class="label">连击</span>

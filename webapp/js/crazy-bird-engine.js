@@ -47,7 +47,8 @@
         ice_block: { hp: 0.8, score: 85, bounce: 0.5, fill: "rgba(165,243,252,.55)", line: "#0e7490", fx: "#cffafe", chill: 1, tier: 2 },
         crystal: { hp: 1.1, score: 170, bounce: 0.72, fill: "rgba(110,231,183,.55)", line: "#047857", fx: "#6ee7b7", explode: 42, tier: 2 },
         gold: { hp: 1.5, score: 440, bounce: 0.62, fill: "#f59e0b", line: "#92400e", fx: "#fde68a", bonus: 1, tier: 3 },
-        obsidian: { hp: 6.2, score: 280, bounce: 0.72, fill: "#1e1b4b", line: "#0b0b1e", fx: "#a855f7", antiExplode: 1, tier: 3 }
+        obsidian: { hp: 6.2, score: 280, bounce: 0.72, fill: "#1e1b4b", line: "#0b0b1e", fx: "#a855f7", antiExplode: 1, tier: 3 },
+        tnt: { hp: 0.75, score: 360, bounce: 0.5, fill: "#ef4444", line: "#7f1d1d", fx: "#fbbf24", explode: 150, tier: 0 }
     };
     const pigs = {
         normal: { r: 22, hp: 1, score: 150, body: "#84cc16", hat: null, shade: "#4d7c0f", eye: "#111827" },
@@ -105,131 +106,151 @@
     };
     const birdKeys = Object.keys(birds);
     const levelThemes = [
-        { name: "晨曦谷地", sky: ["#5fd2ff", "#fef9c3"], hills: ["#65a30d", "#4d7c0f"], sun: [820, 94] },
-        { name: "霜石堡垒", sky: ["#7dd3fc", "#dbeafe"], hills: ["#22c55e", "#15803d"], sun: [760, 72] },
-        { name: "暮色火山", sky: ["#312e81", "#fdba74"], hills: ["#7c2d12", "#431407"], sun: [840, 128] },
-        { name: "海风断崖", sky: ["#38bdf8", "#ccfbf1"], hills: ["#0f766e", "#115e59"], sun: [790, 82] },
-        { name: "星夜沼泽", sky: ["#1e1b4b", "#7c3aed"], hills: ["#365314", "#1a2e05"], sun: [830, 110] },
-        { name: "金砂遗迹", sky: ["#fbbf24", "#fef3c7"], hills: ["#b45309", "#78350f"], sun: [780, 88] },
-        { name: "晶蓝雪原", sky: ["#bae6fd", "#eff6ff"], hills: ["#38bdf8", "#1d4ed8"], sun: [830, 76] },
-        { name: "紫雾森林", sky: ["#a78bfa", "#f5d0fe"], hills: ["#6d28d9", "#3b0764"], sun: [770, 96] },
-        { name: "钢铁峡湾", sky: ["#94a3b8", "#e2e8f0"], hills: ["#475569", "#1e293b"], sun: [820, 70] },
-        { name: "烈阳荒原", sky: ["#fb923c", "#fed7aa"], hills: ["#ea580c", "#7c2d12"], sun: [800, 92] }
+        { name: "月影森林", sky: ["#061129", "#1f2a5c"], hills: ["#173b2f", "#071f16"], moon: [1080, 96], forest: ["#0f2a22", "#06150f"] },
+        { name: "星辉断崖", sky: ["#11143a", "#37266d"], hills: ["#234b36", "#0d2518"], moon: [1030, 82], forest: ["#153222", "#07160f"] },
+        { name: "雾蓝群岛", sky: ["#08223f", "#1e6091"], hills: ["#1b5e45", "#0b2a1d"], moon: [1100, 118], forest: ["#12352c", "#061911"] },
+        { name: "紫夜魔林", sky: ["#1e1244", "#5b21b6"], hills: ["#2f4f24", "#161f10"], moon: [980, 78], forest: ["#1e2d1c", "#0b120a"] },
+        { name: "银月冰湾", sky: ["#0f2a48", "#355c7d"], hills: ["#1e5f65", "#0e3036"], moon: [1060, 86], forest: ["#10363e", "#06191e"] }
     ];
-    const levels = [
-        { name: "晨曦谷地", sky: ["#5fd2ff", "#fef9c3"], hills: ["#65a30d", "#4d7c0f"], sun: [1080, 120], queue: ["red", "yellow", "blue", "black", "ice"], pigs: [[960,618,"normal"],[1040,618,"helmet"],[1000,340,"normal"]], blocks: [[930,518,26,122,"wood"],[1010,518,26,122,"wood"],[1090,518,26,122,"wood"],[954,476,96,22,"glass"],[954,400,26,76,"stone"],[1032,400,26,76,"stone"],[942,366,128,24,"wood"],[1106,452,58,22,"glass"]] },
-        { name: "霜石堡垒", sky: ["#7dd3fc", "#dbeafe"], hills: ["#22c55e", "#15803d"], sun: [1000, 96], queue: ["ice", "blue", "yellow", "red", "black"], pigs: [[924,618,"helmet"],[1002,618,"normal"],[1080,618,"helmet"],[1000,290,"king"]], blocks: [[900,520,28,120,"wood"],[980,520,28,120,"wood"],[1060,520,28,120,"wood"],[920,480,188,22,"glass"],[944,408,28,72,"wood"],[1026,408,28,72,"wood"],[938,374,122,24,"glass"],[980,318,34,44,"wood"],[1128,470,30,170,"wood"]] },
-        { name: "暮色火山", sky: ["#312e81", "#fdba74"], hills: ["#7c2d12", "#431407"], sun: [1100, 160], queue: ["black", "red", "yellow", "ice", "blue"], pigs: [[930,618,"normal"],[1008,618,"helmet"],[1084,618,"splitter"],[980,456,"helmet"],[1060,350,"king"]], blocks: [[904,524,26,116,"stone"],[982,524,26,116,"wood"],[1060,524,26,116,"stone"],[928,484,184,22,"wood"],[948,430,26,54,"glass"],[1020,430,26,54,"glass"],[942,396,118,20,"stone"],[1022,356,48,40,"stone"],[1144,464,30,176,"glass"],[854,464,30,176,"glass"]] }
-    ];
+    const levels = [];
     function makeLevel(i) {
         const theme = levelThemes[i % levelThemes.length];
         const tier = Math.floor(i / 10);
-        const wave = i % 10;
+        const rng = (seed => () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; })(i * 9301 + 49297);
         const allMats = ["wood", "glass", "stone", "rubber", "steel", "ice_block", "crystal", "gold", "obsidian"];
         const mats = allMats.filter(m => materials[m].tier <= Math.min(tier, 5));
         if (!mats.length) mats.push("wood", "glass", "stone");
-        const diff = Math.max(0, i - 2);
-        const isVilla = i >= 2;
-        const baseX = 780 + (i % 5) * 28;
-        const towerCount = clamp(3 + Math.floor(diff * 0.6), 3, 15);
-        const queueSize = clamp(5 + Math.floor(diff * 0.35), 5, 18);
+        const matAt = n => mats[((n % mats.length) + mats.length) % mats.length];
+        const firstOf = (list, fallback) => { for (let k = 0; k < list.length; k++) if (mats.indexOf(list[k]) >= 0) return list[k]; return fallback || mats[0]; };
+        const queueSize = clamp(4 + Math.floor(i * 0.35), 4, 20);
         const queue = Array.from({ length: queueSize }, (_, n) => birdKeys[(i + tier + n * 3) % birdKeys.length]);
-        const pigCount = clamp(3 + Math.floor(diff * 1.1), 3, 25);
+        const blocks = [];
+        const pigSlots = [];
+        const tntSlots = [];
+        const islandCount = clamp(3 + Math.floor(i * 0.22), 3, 7);
+        const areaStart = 480, areaEnd = 1260;
+        const totalSpan = areaEnd - areaStart;
+        const gap = clamp(26 + Math.floor(i * 0.3), 26, 54);
+        const avgSlot = (totalSpan - gap * (islandCount - 1)) / islandCount;
+        const recipeRoll = rng();
+        let cursorX = areaStart;
+        const islandBounds = [];
+        for (let isl = 0; isl < islandCount; isl++) {
+            const slotW = clamp(avgSlot + (rng() - 0.5) * 26, 110, 220);
+            const islX = cursorX;
+            const islRight = islX + slotW;
+            const baseH = clamp(30 + rng() * 70 + i * 2 + (isl % 2 === 0 ? 20 : 0), 30, 260);
+            const platformY = ground - baseH - 16;
+            const deckMat = matAt(i + isl);
+            const stiltMat = firstOf(["wood", "stone"], "wood");
+            const legLeftX = islX + 6, legRightX = islRight - 22 - 6;
+            blocks.push([legLeftX, ground - baseH, 20, baseH, stiltMat]);
+            blocks.push([legRightX, ground - baseH, 20, baseH, stiltMat]);
+            if (slotW > 110 && baseH > 70 && (isl + i) % 2 === 0) {
+                const crossY = ground - baseH * 0.5;
+                blocks.push([legLeftX + 18, crossY, legRightX - legLeftX - 18, 10, "wood"]);
+            }
+            blocks.push([islX - 2, platformY, slotW + 4, 18, deckMat]);
+            const recipe = (isl + i + Math.floor(recipeRoll * 3)) % 4;
+            if (recipe === 0) {
+                const colH = 30 + Math.floor(rng() * 40) + Math.min(60, i * 1.6);
+                const colX = islX + slotW * 0.5 - 16;
+                blocks.push([colX, platformY - colH, 32, colH, matAt(i + isl + 2)]);
+                pigSlots.push({ x: colX + 16, y: platformY - colH - 14, rank: 2, isl });
+                if (i >= 3 && rng() > 0.55) tntSlots.push({ x: islX + 14, y: platformY - 12 });
+            } else if (recipe === 1) {
+                const colH = 38 + Math.floor(rng() * 34) + Math.min(50, i * 1.2);
+                blocks.push([islX + 8, platformY - colH, 22, colH, matAt(i + isl + 1)]);
+                blocks.push([islRight - 30, platformY - colH, 22, colH, matAt(i + isl + 1)]);
+                blocks.push([islX + 10, platformY - colH - 14, slotW - 20, 14, matAt(i + isl + 3)]);
+                pigSlots.push({ x: islX + slotW * 0.5, y: platformY - colH - 28, rank: 3, isl });
+                if (slotW > 110) pigSlots.push({ x: islX + slotW * 0.5, y: platformY - 14, rank: 1, isl });
+                if (i >= 4 && rng() > 0.5) tntSlots.push({ x: islX + slotW * 0.5, y: platformY - colH - 30 });
+            } else if (recipe === 2) {
+                let y = platformY;
+                const tiers = 2 + (i >= 5 ? 1 : 0) + (i >= 12 ? 1 : 0);
+                for (let t = 0; t < tiers; t++) {
+                    const h = 28 + Math.floor(rng() * 16);
+                    const shrink = t * 8;
+                    blocks.push([islX + 10 + shrink, y - h, 20, h, matAt(i + isl + t)]);
+                    blocks.push([islRight - 30 - shrink, y - h, 20, h, matAt(i + isl + t + 1)]);
+                    y -= h;
+                    blocks.push([islX + 10 + shrink, y - 12, slotW - 20 - shrink * 2, 12, matAt(i + isl + t + 2)]);
+                    y -= 12;
+                    if (t < tiers - 1) pigSlots.push({ x: islX + slotW * 0.5, y: y - 14, rank: 1 + t, isl });
+                }
+                pigSlots.push({ x: islX + slotW * 0.5, y: y - 14, rank: tiers + 1, isl });
+                if (i >= 6 && rng() > 0.55) tntSlots.push({ x: islX + slotW * 0.65, y: platformY - 14 });
+            } else {
+                pigSlots.push({ x: islX + slotW * 0.3, y: platformY - 14, rank: 1, isl });
+                pigSlots.push({ x: islX + slotW * 0.72, y: platformY - 14, rank: 1, isl });
+                if (slotW > 120) {
+                    const colH = 32 + Math.floor(rng() * 28);
+                    blocks.push([islX + slotW * 0.5 - 12, platformY - colH, 24, colH, firstOf(["glass", "wood"], "wood")]);
+                    pigSlots.push({ x: islX + slotW * 0.5, y: platformY - colH - 14, rank: 2, isl });
+                }
+                if (i >= 5 && rng() > 0.4) tntSlots.push({ x: islX + slotW * 0.5, y: platformY - 14 });
+            }
+            if (isl === islandCount - 1 && i > 6) {
+                const bossH = 40 + Math.min(80, i * 1.4);
+                blocks.push([islX + slotW * 0.5 - 16, platformY - bossH, 32, bossH, firstOf(["steel", "stone"], "stone")]);
+                pigSlots.push({ x: islX + slotW * 0.5, y: platformY - bossH - 18, rank: 5, isl, boss: true });
+            }
+            if (isl === 0 && rng() > 0.4) pigSlots.push({ x: islX + slotW * 0.5, y: ground - 24, rank: 0, isl });
+            islandBounds.push({ x: islX, right: islRight, top: platformY });
+            cursorX = islRight + gap;
+        }
+        if (i >= 4) {
+            for (let k = 0; k < islandBounds.length - 1; k++) {
+                if (rng() < 0.5) continue;
+                const left = islandBounds[k], right = islandBounds[k + 1];
+                const bridgeY = Math.min(left.top, right.top) + 4;
+                const bridgeW = right.x - left.right;
+                if (bridgeW > 10 && bridgeW < 80) blocks.push([left.right + 2, bridgeY + 22, bridgeW - 4, 10, firstOf(["rubber", "wood"], "wood")]);
+            }
+        }
+        if (i >= 8) {
+            const floatingCount = Math.min(4, Math.floor(i * 0.18));
+            for (let f = 0; f < floatingCount; f++) {
+                const fx = clamp(areaStart + rng() * totalSpan, areaStart + 40, areaEnd - 80);
+                const fy = clamp(260 - rng() * 160 + tier * 6, 110, 380);
+                const fw = 40 + rng() * 40, fh = 14;
+                blocks.push([fx, fy, fw, fh, matAt(i + f + 7)]);
+                if (rng() > 0.5) pigSlots.push({ x: fx + fw * 0.5, y: fy - 14, rank: 4, isl: -1, floating: true });
+            }
+        }
+        if (i >= 15) {
+            const steelWallX = clamp(areaEnd - 60 - rng() * 60, 1100, 1220);
+            const steelWallH = 80 + Math.min(120, i * 1.5);
+            blocks.push([steelWallX, ground - steelWallH, 24, steelWallH, firstOf(["obsidian", "steel", "stone"], "stone")]);
+        }
+        if (i >= 3) tntSlots.forEach(t => blocks.push([t.x - 12, t.y - 12, 24, 24, "tnt"]));
+        const pigCount = clamp(3 + Math.floor(i * 0.7) + islandCount, 3, 24);
         const tierPigs = pigKeys.filter(k => (pigs[k].tier || 0) <= Math.min(tier, 5));
         const levelPigs = [];
-        const blocks = [];
-        const cols = isVilla ? 7 : 5;
-        const rowSpacing = isVilla ? 95 : 80;
-        const colSpacing = isVilla ? 72 : 58;
-        for (let p = 0; p < pigCount; p += 1) {
-            const row = Math.floor(p / cols);
-            const col = p % cols;
-            const offsetX = (row % 2) * (colSpacing / 2) + (Math.random() - 0.5) * (isVilla ? 24 : 12);
-            const offsetY = ((p + wave) % 2) * (isVilla ? 15 : 10) + (Math.random() - 0.5) * (isVilla ? 18 : 8);
-            const px = clamp(baseX + 40 + col * colSpacing + offsetX, 700, 1300);
-            const py = clamp(ground - 28 - row * rowSpacing + offsetY, 120, ground - 30);
+        const slotBag = pigSlots.slice();
+        while (slotBag.length && slotBag.length < pigCount) slotBag.push(pigSlots[Math.floor(rng() * pigSlots.length)]);
+        for (let p = 0; p < pigCount && slotBag.length; p++) {
+            const idx = Math.floor(rng() * slotBag.length);
+            const slot = slotBag.splice(idx, 1)[0];
+            const jx = (rng() - 0.5) * 14, jy = (rng() - 0.5) * 4;
+            const px = clamp(slot.x + jx, areaStart, areaEnd - 10);
+            const py = clamp(slot.y + jy, 90, ground - 22);
             let type;
-            if (i > 8 && p === pigCount - 1 && i % 2 === 0) type = tier >= 3 ? (i % 3 ? "giant" : "king") : "king";
-            else if (i > 15 && p === pigCount - 2 && i % 4 === 0) type = tier >= 2 ? "helmet" : "king";
-            else if (tierPigs.length > 3 && (p + i) % 4 === 0) type = tierPigs[(p + i) % tierPigs.length];
-            else type = ["normal", "helmet", "normal", "helmet", "king"][(i + p + tier) % 5];
+            if (slot.boss) type = tier >= 3 ? "king" : (i % 2 ? "king" : "helmet");
+            else if (slot.rank >= 4 && tierPigs.length > 3 && rng() > 0.5) type = tierPigs[(p + i) % tierPigs.length];
+            else if (tierPigs.length > 3 && (p + i) % 5 === 0) type = tierPigs[(p + i + 2) % tierPigs.length];
+            else if (slot.rank === 0) type = ["normal", "helmet", "normal"][(p + i) % 3];
+            else if (slot.rank >= 3) type = ["king", "helmet", "king", "normal"][(p + i) % 4];
+            else type = ["normal", "helmet", "normal", "king", "normal"][(i + p + tier) % 5];
             levelPigs.push([px, py, type]);
         }
-        const towerHeightBase = isVilla ? 100 : 70;
-        const heightBonus = Math.min(tier, 8) * 12 + ((i + wave) % 4) * 15;
-        for (let t = 0; t < towerCount; t += 1) {
-            const x = clamp(baseX + t * (isVilla ? 60 : 52), 680, 1320);
-            const h = towerHeightBase + heightBonus + ((i + t) % 4) * 12;
-            const mat = mats[(i + t * 2) % mats.length];
-            blocks.push([x, ground - h, 28, h, mat]);
-            if (t < towerCount - 1 && (t + i) % 2 === 0) {
-                const connY = ground - h - (isVilla ? 26 : 20);
-                blocks.push([x + 22, connY, isVilla ? 68 : 58, isVilla ? 26 : 20, mats[(i + t + 1) % mats.length]]);
-            }
-            if (isVilla && h > 150 && (t + i) % 3 === 0) {
-                const midY = ground - h * 0.6;
-                blocks.push([x - 8, midY, 44, 18, mats[(i + t + 2) % mats.length]]);
-            }
-        }
-        const mainFloorY = ground - (isVilla ? 130 : 80);
-        blocks.push([baseX + 20, mainFloorY, Math.min(720, towerCount * (isVilla ? 58 : 50) + 24), isVilla ? 26 : 22, mats[(i + 2) % mats.length]]);
-        if (isVilla) {
-            const secondFloorY = mainFloorY - (isVilla ? 100 : 70);
-            blocks.push([baseX + 60, secondFloorY, Math.min(600, towerCount * (isVilla ? 48 : 40) + 18), isVilla ? 24 : 20, mats[(i + 3) % mats.length]]);
-            if (i >= 5) {
-                const thirdFloorY = secondFloorY - (isVilla ? 85 : 60);
-                blocks.push([baseX + 100, thirdFloorY, Math.min(480, towerCount * (isVilla ? 40 : 34) + 14), isVilla ? 22 : 18, mats[(i + 4) % mats.length]]);
-            }
-            if (i >= 8) {
-                const fourthFloorY = mainFloorY - (isVilla ? 280 : 200);
-                blocks.push([baseX + 140, fourthFloorY, Math.min(360, towerCount * 32 + 12), 20, mats[(i + 5) % mats.length]]);
-            }
-            const leftWallX = clamp(baseX - 60, 680, 1000);
-            blocks.push([leftWallX, ground - 320, 30, 320 - 60, mats.indexOf("steel") >= 0 ? "steel" : "stone"]);
-            const rightWallX = clamp(baseX + towerCount * 60 + 24, 900, 1320);
-            blocks.push([rightWallX, ground - 320, 30, 320 - 60, mats.indexOf("steel") >= 0 ? "steel" : "stone"]);
-        }
-        if (diff >= 3) {
-            const supportY = ground - (isVilla ? 280 : 200);
-            blocks.push([clamp(baseX - 70, 680, 1020), supportY, 28, 280 - 50, mats[(i + 1) % mats.length]]);
-            blocks.push([clamp(baseX + towerCount * (isVilla ? 60 : 52) + 30, 920, 1320), supportY, 28, 280 - 50, mats[(i + 2) % mats.length]]);
-        }
-        if (diff >= 6) {
-            for (let b = 0; b < Math.min(3, Math.floor(tier / 2)); b++) {
-                const bridgeX = baseX + 80 + b * 120;
-                const bridgeY = ground - (isVilla ? 220 : 160);
-                blocks.push([bridgeX, bridgeY, 26, isVilla ? 160 : 120, mats[(i + b + 3) % mats.length]]);
-            }
-        }
-        if (diff >= 10) {
-            const towerTopY = ground - (isVilla ? 340 : 260);
-            blocks.push([baseX + 40, towerTopY, 24, 70, mats.indexOf("steel") >= 0 ? "steel" : "stone"]);
-            blocks.push([baseX + towerCount * (isVilla ? 60 : 52) - 20, towerTopY, 24, 70, mats.indexOf("steel") >= 0 ? "steel" : "stone"]);
-            blocks.push([baseX + 54, towerTopY - 20, Math.min(380, towerCount * 28 + 16), 18, mats.indexOf("gold") >= 0 ? "gold" : mats[(i + 6) % mats.length]]);
-        }
-        if (diff >= 15) {
-            const peakY = ground - (isVilla ? 400 : 320);
-            blocks.push([baseX + towerCount * 30 - 20, peakY, 60, 16, mats.indexOf("crystal") >= 0 ? "crystal" : mats[(i + 7) % mats.length]]);
-        }
-        if (diff >= 20) {
-            for (let c = 0; c < Math.min(2, Math.floor(tier / 3)); c++) {
-                const cornerX = c === 0 ? clamp(baseX - 40, 680, 900) : clamp(baseX + towerCount * 60 + 10, 1000, 1320);
-                const cornerY = ground - 380;
-                blocks.push([cornerX, cornerY, 36, 36, mats.indexOf("obsidian") >= 0 ? "obsidian" : "stone"]);
-            }
-        }
-        if (i >= 12) {
-            const randomBlockCount = Math.min(4, Math.floor(tier / 2));
-            for (let r = 0; r < randomBlockCount; r++) {
-                const randX = clamp(baseX + (Math.random() - 0.5) * 200 + towerCount * 30, 700, 1300);
-                const randY = clamp(ground - 100 - Math.random() * 250, 150, ground - 50);
-                blocks.push([randX, randY, 24 + Math.random() * 20, 18 + Math.random() * 24, mats[Math.floor(Math.random() * mats.length)]]);
-            }
-        }
-        return { name: theme.name + " " + String(i + 1).padStart(2, "0"), sky: theme.sky, hills: theme.hills, sun: theme.sun, queue, pigs: levelPigs, blocks };
+        return { name: theme.name + " " + String(i + 1).padStart(2, "0"), sky: theme.sky, hills: theme.hills, sun: theme.sun, moon: theme.moon, forest: theme.forest, queue, pigs: levelPigs, blocks };
     }
     while (levels.length < 100) levels.push(makeLevel(levels.length));
-    const game = { started: false, running: false, level: 0, selected: 0, score: 0, best: loadBest(), combo: 0, comboAt: 0, dragging: false, power: 0, queue: [], current: null, active: [], pigs: [], blocks: [], particles: [], rings: [], hazards: [], beams: [], burns: [], eggs: [], glyphs: [], shockwaves: [], shake: { x: 0, y: 0, t: 0, mag: 0 }, clouds: clouds(), status: "点击开始游戏", nextTimer: null, lvlTimer: null, pigCounter: 0, blockCounter: 0, aimPreview: true, skillUseCount: 0 };
+    function makeStars() { const a = []; for (let k = 0; k < 140; k++) a.push({ x: (k * 97.31 + 13) % 1280, y: ((k * 41.7) % 460) + 20, r: 0.6 + ((k * 13) % 7) * 0.25, phase: (k * 0.37) % 6.283, speed: 0.006 + (k % 5) * 0.002 }); return a; }
+    function makeTreeLine(seed) { const a = []; let x = -40; const r = (s => () => { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; })(seed || 7); while (x < 1320) { const w = 40 + r() * 80, h = 60 + r() * 90; a.push({ x, w, h, variant: Math.floor(r() * 3) }); x += w * 0.5 + r() * 24; } return a; }
+    const game = { started: false, running: false, level: 0, selected: 0, score: 0, best: loadBest(), combo: 0, comboAt: 0, dragging: false, pointerId: null, power: 0, queue: [], current: null, active: [], pigs: [], blocks: [], particles: [], rings: [], hazards: [], beams: [], burns: [], eggs: [], glyphs: [], shockwaves: [], shake: { x: 0, y: 0, t: 0, mag: 0 }, clouds: clouds(), stars: makeStars(), farTrees: makeTreeLine(31), nearTrees: makeTreeLine(71), status: "点击开始游戏", nextTimer: null, lvlTimer: null, pigCounter: 0, blockCounter: 0, aimPreview: true, skillUseCount: 0 };
 
     function loadBest() { try { return Number(localStorage.getItem(bestKey) || 0); } catch (e) { return 0; } }
     function saveBest() { try { localStorage.setItem(bestKey, String(game.best)); } catch (e) {} }
@@ -287,14 +308,15 @@
     function card(id, name, st, active) { const c = birds[id].c; return '<div class="roster-item' + (active ? ' active' : '') + '"><div class="roster-badge" style="background:' + c.body + ';box-shadow:0 0 0 4px ' + c.aura + ';"></div><div class="roster-copy"><strong>' + name + '</strong><span>' + st + ' · ' + birds[id].skillName + '</span></div></div>'; }
     function clearTimers() { if (game.nextTimer) clearTimeout(game.nextTimer); if (game.lvlTimer) clearTimeout(game.lvlTimer); game.nextTimer = null; game.lvlTimer = null; }
     function spawnNext(silent) { const id = game.queue.shift(); game.current = id ? mkBird(id, false) : null; game.active = game.current ? [game.current] : []; setPower(0); if (id && !silent) audio.playBirdReady(); updateUI(); return !!id; }
-    function buildLevel(i) { clearTimers(); game.level = clamp(i, 0, levels.length - 1); game.selected = game.level; game.dragging = false; game.queue = levels[game.level].queue.slice(); game.pigCounter = 0; game.blockCounter = 0; game.blocks = levels[game.level].blocks.map(mkBlock); game.pigs = levels[game.level].pigs.map(mkPig); game.particles = []; game.rings = []; game.hazards = []; game.beams = []; game.burns = []; game.eggs = []; game.glyphs = []; game.shockwaves = []; game.shake = { x: 0, y: 0, t: 0, mag: 0 }; game.flash = null; game.clouds = clouds(); audio.setTheme(game.level); spawnNext(); setStatus("第" + (game.level + 1) + "关：拖动弹弓发射"); }
-    function previewLevel(i) { clearTimers(); game.level = clamp(i, 0, levels.length - 1); game.selected = game.level; game.started = false; game.running = false; game.dragging = false; game.combo = 0; game.queue = levels[game.level].queue.slice(); game.pigCounter = 0; game.blockCounter = 0; game.blocks = levels[game.level].blocks.map(mkBlock); game.pigs = levels[game.level].pigs.map(mkPig); game.particles = []; game.rings = []; game.hazards = []; game.beams = []; game.burns = []; game.eggs = []; game.glyphs = []; game.shockwaves = []; game.shake = { x: 0, y: 0, t: 0, mag: 0 }; game.flash = null; game.clouds = clouds(); game.current = null; game.active = []; spawnNext(true); setPower(0); setStatus("预览第" + (game.level + 1) + "关，点击开始本关"); updateUI(); }
+    function buildLevel(i) { clearTimers(); game.level = clamp(i, 0, levels.length - 1); game.selected = game.level; game.dragging = false; game.pointerId = null; game.queue = levels[game.level].queue.slice(); game.pigCounter = 0; game.blockCounter = 0; game.blocks = levels[game.level].blocks.map(mkBlock); game.pigs = levels[game.level].pigs.map(mkPig); game.particles = []; game.rings = []; game.hazards = []; game.beams = []; game.burns = []; game.eggs = []; game.glyphs = []; game.shockwaves = []; game.shake = { x: 0, y: 0, t: 0, mag: 0 }; game.flash = null; game.clouds = clouds(); audio.setTheme(game.level); spawnNext(); setStatus("第" + (game.level + 1) + "关：拖动弹弓发射"); }
+    function previewLevel(i) { clearTimers(); game.level = clamp(i, 0, levels.length - 1); game.selected = game.level; game.started = false; game.running = false; game.dragging = false; game.pointerId = null; game.combo = 0; game.queue = levels[game.level].queue.slice(); game.pigCounter = 0; game.blockCounter = 0; game.blocks = levels[game.level].blocks.map(mkBlock); game.pigs = levels[game.level].pigs.map(mkPig); game.particles = []; game.rings = []; game.hazards = []; game.beams = []; game.burns = []; game.eggs = []; game.glyphs = []; game.shockwaves = []; game.shake = { x: 0, y: 0, t: 0, mag: 0 }; game.flash = null; game.clouds = clouds(); game.current = null; game.active = []; spawnNext(true); setPower(0); setStatus("预览第" + (game.level + 1) + "关，点击开始本关"); updateUI(); }
     function start() { audio.playButton(); startLevel(game.selected || 0, true); }
     function startLevel(i, clearScore) { audio.resume(); audio.playLevelStart(i); game.started = true; game.running = true; if (clearScore) { game.score = 0; game.combo = 0; } buildLevel(i); updateUI(); }
     function reset() { audio.playButton(); startLevel(game.level, true); }
-    function begin(e) { if (e.cancelable) e.preventDefault(); if (canUseSkill()) { skill(); return; } if (!game.running || !game.current || game.current.launched) return; audio.resume(); const p = pos(e); if (e.pointerType === "touch" || dist(p.x, p.y, game.current.x, game.current.y) <= game.current.r + 42) { game.dragging = true; drag(e); setStatus("瞄准中，松手发射 " + game.current.name); } }
-    function drag(e) { if (!game.dragging || !game.current) return; if (e.cancelable) e.preventDefault(); const p = pos(e), dx = p.x - forkX, dy = p.y - forkY, d = Math.hypot(dx, dy), l = Math.min(d, sling.pull), r = d ? l / d : 0; game.current.x = forkX + dx * r; game.current.y = forkY + dy * r; setPower(l / sling.pull * 100); audio.playAim(game.power); updateUI(); }
-    function release() { if (!game.dragging || !game.current) return; game.dragging = false; const lx = forkX - game.current.x, ly = forkY - game.current.y, p = Math.hypot(lx, ly); if (p < 10) { game.current.x = forkX; game.current.y = forkY; setPower(0); setStatus("拖动弹弓发射 " + game.current.name); return; } game.current.launched = true; game.current.vx = lx * game.current.ls; game.current.vy = ly * game.current.ls; audio.playLaunch(game.power); setStatus("飞行中：空格或按钮释放技能"); updateUI(); }
+    function begin(e) { if (e.cancelable) e.preventDefault(); if (!game.running || !game.current) return; audio.resume(); if (game.current.launched) { if (canUseSkill()) skill(); return; } const p = pos(e); if (e.pointerType === "touch" || dist(p.x, p.y, game.current.x, game.current.y) <= game.current.r + 48) { game.dragging = true; game.pointerId = e.pointerId; if (canvas.setPointerCapture) { try { canvas.setPointerCapture(e.pointerId); } catch (err) {} } drag(e); setStatus("瞄准中，松手发射 " + game.current.name); } }
+    function drag(e) { if (!game.dragging || !game.current || game.current.launched) return; if (game.pointerId !== null && e.pointerId !== game.pointerId) return; if (e.cancelable) e.preventDefault(); const p = pos(e), dx = p.x - forkX, dy = p.y - forkY, d = Math.hypot(dx, dy), l = Math.min(d, sling.pull), r = d ? l / d : 0; game.current.x = forkX + dx * r; game.current.y = forkY + dy * r; setPower(l / sling.pull * 100); audio.playAim(game.power); updateUI(); }
+    function release(e) { if (!game.dragging || !game.current) return; if (e && game.pointerId !== null && e.pointerId !== game.pointerId) return; if (e && e.cancelable) e.preventDefault(); const id = game.pointerId; game.dragging = false; game.pointerId = null; if (id !== null && canvas.releasePointerCapture) { try { canvas.releasePointerCapture(id); } catch (err) {} } const lx = forkX - game.current.x, ly = forkY - game.current.y, p = Math.hypot(lx, ly); if (p < 10) { game.current.x = forkX; game.current.y = forkY; setPower(0); setStatus("拖动弹弓发射 " + game.current.name); return; } game.current.launched = true; game.current.vx = lx * game.current.ls; game.current.vy = ly * game.current.ls; audio.playLaunch(game.power); setStatus("飞行中：空格或按钮释放技能"); updateUI(); }
+    function cancelDrag(e) { if (!game.dragging) return; if (e && game.pointerId !== null && e.pointerId !== game.pointerId) return; const id = game.pointerId; game.dragging = false; game.pointerId = null; if (id !== null && canvas.releasePointerCapture) { try { canvas.releasePointerCapture(id); } catch (err) {} } if (game.current && !game.current.launched) { game.current.x = forkX; game.current.y = forkY; setPower(0); setStatus("拖动弹弓发射 " + game.current.name); updateUI(); } }
     function area(x, y, r, damage, type) { game.blocks.forEach(b => { if (!b.alive) return; const cx = b.x + b.w / 2, cy = b.y + b.h / 2, k = 1 - dist(x, y, cx, cy) / r; if (k <= 0) return; if (type === "frost") b.frozen = Math.max(b.frozen, 220 * k + 60); b.cd = 0; hitBlock(b, damage * (0.55 + k * 0.85) * (type === "shock" ? 1.9 : 1.25), true); emit(cx, cy, type === "frost" ? "#a5f3fc" : "#fcd34d", 10 + Math.round(14 * k), 5.4); }); game.pigs.forEach(p => { if (!p.alive) return; const k = 1 - dist(x, y, p.x, p.y) / r; if (k <= 0) return; if (type === "frost") p.frozen = Math.max(p.frozen, 240 * k + 60); p.cd = 0; hitPig(p, damage * (0.6 + k * 0.9) * (type === "shock" ? 1.7 : 1.1)); }); }
     function skill() {
         const b = game.current;
@@ -721,11 +743,13 @@
             audio.playDestroy(b.mat);
             if (m.explode && !b._chained) {
                 const r = m.explode;
-                ring(cx, cy, r + 16, "rgba(110,231,183,.85)", 6, 22);
-                spark(cx, cy, 18, [m.fx, "#ffffff", "#34d399"], 6.5, 56);
-                flash("rgba(110,231,183,.4)", 12); shake(6, 14);
-                game.pigs.forEach(p => { if (p.alive && dist(p.x, p.y, cx, cy) < r) hitPig(p, 1.6); });
-                game.blocks.forEach(o => { if (!o.alive || o === b) return; if (materials[o.mat].antiExplode) return; const ox = o.x + o.w / 2, oy = o.y + o.h / 2, d = dist(ox, oy, cx, cy); if (d < r) { o._chained = true; hitBlock(o, 1.2 * (1 - d / r), true); o._chained = false; } });
+                const isTnt = b.mat === "tnt";
+                ring(cx, cy, r + (isTnt ? 42 : 16), isTnt ? "rgba(249,115,22,.92)" : "rgba(110,231,183,.85)", isTnt ? 10 : 6, isTnt ? 30 : 22);
+                ring(cx, cy, r * 0.58, isTnt ? "rgba(253,224,71,.84)" : "rgba(255,255,255,.82)", 5, 20);
+                spark(cx, cy, isTnt ? 32 : 18, isTnt ? [m.fx, "#ffffff", "#ef4444", "#f97316"] : [m.fx, "#ffffff", "#34d399"], isTnt ? 8.5 : 6.5, isTnt ? 72 : 56);
+                flash(isTnt ? "rgba(249,115,22,.55)" : "rgba(110,231,183,.4)", isTnt ? 18 : 12); shake(isTnt ? 12 : 6, isTnt ? 22 : 14);
+                game.pigs.forEach(p => { if (p.alive && dist(p.x, p.y, cx, cy) < r) hitPig(p, isTnt ? 3.2 : 1.6); });
+                game.blocks.forEach(o => { if (!o.alive || o === b) return; if (materials[o.mat].antiExplode) return; const ox = o.x + o.w / 2, oy = o.y + o.h / 2, d = dist(ox, oy, cx, cy); if (d < r) { o._chained = true; hitBlock(o, (isTnt ? 3.1 : 1.2) * (1 - d / r), true); o._chained = false; } });
             }
             if (m.chill) game.pigs.forEach(p => { if (p.alive && dist(p.x, p.y, cx, cy) < 80) p.frozen = Math.max(p.frozen, 80); });
             game.pigs.forEach(p => { if (p.alive && dist(p.x, p.y, cx, cy) < 110) hitPig(p, 1.2); });
@@ -964,58 +988,85 @@
                 contacted = true;
             });
             if (contacted && !b.clone && b === game.current && b.skillReady && !b.skillUsed && !b.resolved && (b.skill === "shock" || b.skill === "frost" || b.skill === "lift")) skill();
-            if (Math.abs(b.vx) + Math.abs(b.vy) < 1.25 && b.y > ground - b.r - 3) b.sleep += dt; else b.sleep = 0;
-            if (b.sleep > 24 || b.x > canvas.width + 160 || b.x < -160 || b.y > canvas.height + 160) resolve(b);
+            const slow = Math.abs(b.vx) + Math.abs(b.vy) < 1.25;
+            const restingOnBlock = game.blocks.some(k => k.alive && b.y + b.r >= k.y - 5 && b.y + b.r <= k.y + 10 && b.x >= k.x - b.r && b.x <= k.x + k.w + b.r);
+            if (slow && (b.y > ground - b.r - 3 || contacted || restingOnBlock)) b.sleep += dt; else b.sleep = 0;
+            if (b.sleep > 34) { ring(b.x, b.y, 36, "rgba(255,255,255,.65)", 3, 14); spark(b.x, b.y, 8, [b.c.trail, "#ffffff"], 3.2, 32); resolve(b); }
+            if (b.x > canvas.width + 160 || b.x < -160 || b.y > canvas.height + 160) resolve(b);
         });
         if (!game.pigs.some(p => p.alive)) return;
         if (game.active.length && game.active.every(b => b.resolved)) { if (game.queue.length) nextBird(); else if (!game.nextTimer) finish(false); }
     }
     function cloud(c) { ctx.save(); ctx.translate(c.x, c.y); ctx.scale(c.s, c.s); ctx.fillStyle = "rgba(255,255,255,.8)"; ctx.beginPath(); ctx.arc(0, 0, 28, 0, Math.PI * 2); ctx.arc(26, -10, 22, 0, Math.PI * 2); ctx.arc(54, 0, 30, 0, Math.PI * 2); ctx.arc(24, 10, 24, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
     function rounded(x, y, w, h, r, fill) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); }
+    function drawTreeLine(list, y, color, scale) { ctx.save(); ctx.fillStyle = color; list.forEach(t => { const x = t.x, w = t.w * scale, h = t.h * scale; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + w * .25, y - h * .52); ctx.lineTo(x + w * .42, y - h * .42); ctx.lineTo(x + w * .55, y - h); ctx.lineTo(x + w * .72, y - h * .42); ctx.lineTo(x + w * .9, y - h * .5); ctx.lineTo(x + w, y); ctx.closePath(); ctx.fill(); ctx.fillRect(x + w * .45, y - h * .28, w * .08, h * .28); }); ctx.restore(); }
     function drawBg() {
         const lv = levels[game.level], g = ctx.createLinearGradient(0, 0, 0, canvas.height);
         g.addColorStop(0, lv.sky[0]); g.addColorStop(1, lv.sky[1]);
         ctx.fillStyle = g; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath(); ctx.arc(lv.sun[0], lv.sun[1], 54, 0, Math.PI * 2); ctx.fillStyle = "rgba(255,240,164,.95)"; ctx.fill();
-        ctx.beginPath(); ctx.arc(lv.sun[0], lv.sun[1], 78, 0, Math.PI * 2); ctx.fillStyle = "rgba(255,240,164,.18)"; ctx.fill();
-        game.clouds.forEach(cloud);
+        game.stars.forEach(s => { const tw = 0.55 + Math.sin(performance.now() * s.speed + s.phase) * 0.28; ctx.globalAlpha = clamp(tw, .18, .86); ctx.fillStyle = "#f8fafc"; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill(); });
+        ctx.globalAlpha = 1;
+        const moon = lv.moon || lv.sun || [1080, 96];
+        ctx.beginPath(); ctx.arc(moon[0], moon[1], 56, 0, Math.PI * 2); ctx.fillStyle = "rgba(226,232,240,.96)"; ctx.fill();
+        ctx.beginPath(); ctx.arc(moon[0] - 17, moon[1] - 10, 48, 0, Math.PI * 2); ctx.fillStyle = "rgba(15,23,42,.22)"; ctx.fill();
+        ctx.beginPath(); ctx.arc(moon[0], moon[1], 94, 0, Math.PI * 2); ctx.fillStyle = "rgba(191,219,254,.12)"; ctx.fill();
+        ctx.globalAlpha = .68; game.clouds.forEach(cloud); ctx.globalAlpha = 1;
         ctx.fillStyle = lv.hills[0]; ctx.beginPath();
-        ctx.moveTo(0, 540);
-        ctx.quadraticCurveTo(150, 450, 340, 550);
-        ctx.quadraticCurveTo(500, 610, 680, 500);
-        ctx.quadraticCurveTo(880, 390, 1280, 550);
+        ctx.moveTo(0, 520);
+        ctx.quadraticCurveTo(150, 420, 340, 540);
+        ctx.quadraticCurveTo(500, 600, 680, 492);
+        ctx.quadraticCurveTo(880, 368, 1280, 548);
         ctx.lineTo(1280, 720); ctx.lineTo(0, 720); ctx.closePath(); ctx.fill();
+        drawTreeLine(game.farTrees, 610, lv.forest ? lv.forest[0] : "rgba(15,42,34,.95)", 1.05);
         ctx.fillStyle = lv.hills[1]; ctx.beginPath();
         ctx.moveTo(0, 600);
         ctx.quadraticCurveTo(220, 560, 420, 626);
         ctx.quadraticCurveTo(640, 690, 900, 580);
         ctx.quadraticCurveTo(1080, 512, 1280, 620);
         ctx.lineTo(1280, 720); ctx.lineTo(0, 720); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "rgba(76,42,18,.95)"; ctx.fillRect(0, ground, canvas.width, canvas.height - ground);
-        ctx.fillStyle = "rgba(132,204,22,.88)"; ctx.fillRect(0, ground - 7, canvas.width, 12);
+        drawTreeLine(game.nearTrees, ground + 6, lv.forest ? lv.forest[1] : "rgba(6,21,15,.98)", 1.2);
+        ctx.fillStyle = "rgba(36,22,12,.96)"; ctx.fillRect(0, ground, canvas.width, canvas.height - ground);
+        ctx.fillStyle = "rgba(21,128,61,.78)"; ctx.fillRect(0, ground - 7, canvas.width, 12);
         ctx.fillStyle = "rgba(255,255,255,.12)"; for (let x = 0; x < canvas.width; x += 64) ctx.fillRect(x + (game.level % 3) * 7, ground + 24 + (x % 5) * 4, 28, 5);
+        ctx.fillStyle = "rgba(250,204,21,.75)"; for (let f = 0; f < 24; f++) { const x = (f * 173 + game.level * 37 + performance.now() * 0.015) % 1280, y = 420 + ((f * 47) % 170); ctx.globalAlpha = 0.18 + Math.sin(performance.now() * 0.004 + f) * 0.12; ctx.beginPath(); ctx.arc(x, y, 1.4 + (f % 3) * .4, 0, Math.PI * 2); ctx.fill(); } ctx.globalAlpha = 1;
     }
     function drawAimPreview() {
         if (!game.aimPreview || !game.dragging || !game.current || game.current.launched) return;
         const b = game.current, lx = forkX - b.x, ly = forkY - b.y, pull = Math.hypot(lx, ly);
         if (pull < 12) return;
         let x = forkX, y = forkY, vx = lx * b.ls, vy = ly * b.ls;
-        ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.shadowColor = b.c.trail; ctx.shadowBlur = 10;
+        const pts = [];
         for (let i = 0; i < 36; i++) {
             vx *= Math.pow(.994, 2.1); vy = vy * Math.pow(.997, 2.1) + b.g * 2.1;
             x += vx * 2.1; y += vy * 2.1;
             if (y > ground - b.r || x < 0 || x > canvas.width) break;
-            const alpha = 1 - i / 38, r = Math.max(2.2, 6.2 - i * 0.09);
-            ctx.globalAlpha = alpha * 0.82;
-            ctx.fillStyle = i % 3 === 0 ? "#ffffff" : b.c.trail;
-            ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+            pts.push({ x, y, a: 1 - i / 38, r: Math.max(1.8, 5.4 - i * 0.08) });
         }
-        ctx.globalAlpha = .72; ctx.strokeStyle = b.c.trail; ctx.lineWidth = 2;
+        if (!pts.length) return;
+        ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.shadowColor = "#ef4444"; ctx.shadowBlur = 18;
+        ctx.beginPath(); ctx.moveTo(forkX, forkY); pts.forEach(p => ctx.lineTo(p.x, p.y)); ctx.globalAlpha = .36; ctx.strokeStyle = "rgba(239,68,68,.95)"; ctx.lineWidth = 7; ctx.stroke();
+        ctx.shadowBlur = 8; ctx.beginPath(); ctx.moveTo(forkX, forkY); pts.forEach(p => ctx.lineTo(p.x, p.y)); ctx.globalAlpha = .9; ctx.strokeStyle = "rgba(254,202,202,.95)"; ctx.lineWidth = 2.2; ctx.stroke();
+        pts.forEach((p, i) => { if (i % 3) return; ctx.globalAlpha = p.a * .86; ctx.fillStyle = i % 6 === 0 ? "#ffffff" : "#ef4444"; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); });
+        ctx.globalAlpha = .78; ctx.strokeStyle = "rgba(248,113,113,.9)"; ctx.lineWidth = 3;
         ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(forkX + lx * .34, forkY + ly * .34); ctx.stroke();
         ctx.restore(); ctx.globalAlpha = 1;
     }
     function drawSling() { const b = game.current && !game.current.resolved ? game.current : { x: forkX, y: forkY }; ctx.strokeStyle = "#7c2d12"; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(sling.bx, ground); ctx.lineTo(sling.bx, sling.by); ctx.moveTo(sling.fx, ground); ctx.lineTo(sling.fx, sling.fy); ctx.stroke(); ctx.lineWidth = 4; ctx.strokeStyle = "#a16207"; ctx.beginPath(); ctx.moveTo(sling.bx, sling.by); ctx.lineTo(b.x, b.y); ctx.moveTo(sling.fx, sling.fy); ctx.lineTo(b.x, b.y); ctx.stroke(); }
     function drawBlock(b) { const m = materials[b.mat]; ctx.save(); if (b.frozen > 0) ctx.globalAlpha = .9; if (b.airborne && b.rotation) { const cx = b.x + b.w / 2, cy = b.y + b.h / 2; ctx.translate(cx, cy); ctx.rotate(b.rotation); ctx.translate(-cx, -cy); } if (b.lift > 0) { ctx.shadowColor = "rgba(147,197,253,.8)"; ctx.shadowBlur = 14; } rounded(b.x, b.y, b.w, b.h, 6, m.fill); ctx.shadowBlur = 0; ctx.fillStyle = b.frozen > 0 ? "rgba(224,242,254,.34)" : "rgba(255,255,255,.12)"; ctx.fillRect(b.x + 5, b.y + 5, b.w - 10, 6); ctx.strokeStyle = m.line; ctx.lineWidth = 2 + b.pulse * .12; ctx.beginPath(); ctx.moveTo(b.x + 8, b.y + b.h * .3); ctx.lineTo(b.x + b.w - 8, b.y + b.h * .36); ctx.moveTo(b.x + b.w * .4, b.y + 8); ctx.lineTo(b.x + b.w * .5, b.y + b.h - 8); if (b.hp < b.max) { ctx.moveTo(b.x + b.w * .65, b.y + b.h * .2); ctx.lineTo(b.x + b.w * .3, b.y + b.h * .8); } ctx.stroke(); if (b.frozen > 0) { ctx.strokeStyle = "rgba(224,242,254,.8)"; ctx.strokeRect(b.x + 2, b.y + 2, b.w - 4, b.h - 4); } ctx.restore(); }
+    function drawBlockNice(b) {
+        if (b.mat !== "tnt") { drawBlock(b); return; }
+        ctx.save();
+        if (b.airborne && b.rotation) { const cx = b.x + b.w / 2, cy = b.y + b.h / 2; ctx.translate(cx, cy); ctx.rotate(b.rotation); ctx.translate(-cx, -cy); }
+        const cx = b.x + b.w / 2;
+        ctx.shadowColor = "rgba(249,115,22,.86)"; ctx.shadowBlur = 12 + b.pulse;
+        rounded(b.x, b.y, b.w, b.h, 5, "#dc2626");
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#7f1d1d"; ctx.fillRect(b.x + 3, b.y + 4, b.w - 6, 5); ctx.fillRect(b.x + 3, b.y + b.h - 9, b.w - 6, 5);
+        ctx.fillStyle = "#facc15"; ctx.font = "bold 11px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("TNT", cx, b.y + b.h * .52);
+        ctx.strokeStyle = "#fef3c7"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, b.y + 4); ctx.quadraticCurveTo(cx + 9, b.y - 8, cx + 2, b.y - 15); ctx.stroke();
+        ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(cx + 2, b.y - 15, 3 + Math.sin(performance.now() * .02) * .8, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+    }
     function drawPig(p) {
         const t = pigs[p.type], wobble = Math.sin(p.pulse) * 1.4, r = p.r;
         ctx.save();
@@ -1153,7 +1204,7 @@
         drawHazards();
         drawBurns();
         drawGlyphs();
-        game.blocks.filter(b => b.alive).forEach(drawBlock);
+        game.blocks.filter(b => b.alive).forEach(drawBlockNice);
         game.pigs.filter(p => p.alive).forEach(drawPig);
         drawSling();
         drawAimPreview();
@@ -1168,7 +1219,7 @@
     function startSelectedLevel() { audio.playButton(); startLevel(Number(ui.levelSelect ? ui.levelSelect.value : game.selected) || 0, true); }
     function toggleFullscreen() { audio.playButton(); const target = ui.stage || canvas; if (!document.fullscreenElement) { const request = target.requestFullscreen || target.webkitRequestFullscreen || target.msRequestFullscreen; if (request) request.call(target); return; } const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen; if (exit) exit.call(document); }
     function syncFullscreenButton() { if (ui.fullscreen) ui.fullscreen.textContent = document.fullscreenElement ? "退出全屏" : "全屏模式"; }
-    function syncAimButton() { if (ui.aimToggle) { ui.aimToggle.setAttribute("aria-pressed", game.aimPreview ? "true" : "false"); ui.aimToggle.textContent = game.aimPreview ? "预瞄线：开" : "预瞄线：关"; } }
+    function syncAimButton() { if (ui.aimToggle) { ui.aimToggle.setAttribute("aria-pressed", game.aimPreview ? "true" : "false"); ui.aimToggle.textContent = game.aimPreview ? "瞄准预览：开" : "瞄准预览：关"; } }
     function toggleAimPreview() { game.aimPreview = !game.aimPreview; syncAimButton(); audio.playButton(); }
 
     if (ui.start) ui.start.addEventListener("click", start);
@@ -1184,8 +1235,8 @@
     document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
     canvas.addEventListener("pointerdown", begin, { passive: false });
     window.addEventListener("pointermove", drag, { passive: false });
-    window.addEventListener("pointerup", release);
-    window.addEventListener("pointercancel", release);
+    window.addEventListener("pointerup", release, { passive: false });
+    window.addEventListener("pointercancel", cancelDrag, { passive: false });
     window.addEventListener("keydown", e => { if (e.code === "Space") { e.preventDefault(); skill(); } });
 
     renderLevelOptions();

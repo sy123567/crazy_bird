@@ -222,24 +222,248 @@ button:active {
     -webkit-user-select: none;
 }
 
+.game-layout:fullscreen,
+.game-layout:-webkit-full-screen {
+    display: grid;
+    grid-template-columns: minmax(900px, 1280px) 320px;
+    gap: 18px;
+    align-items: start;
+    width: 100vw;
+    width: 100dvw;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 16px;
+    overflow-x: auto;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.82) rgba(15, 23, 42, 0.45);
+    background: linear-gradient(180deg, #020617, #0f172a);
+}
+
+.game-layout:fullscreen::-webkit-scrollbar,
+.game-layout:-webkit-full-screen::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.game-layout:fullscreen::-webkit-scrollbar-track,
+.game-layout:-webkit-full-screen::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.game-layout:fullscreen::-webkit-scrollbar-thumb,
+.game-layout:-webkit-full-screen::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(15, 23, 42, 0.45);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #38bdf8, #a78bfa);
+}
+
+.game-layout:fullscreen .game-stage-card,
+.game-layout:-webkit-full-screen .game-stage-card {
+    padding: 12px;
+    border-radius: 24px;
+}
+
+.game-layout:fullscreen #gameCanvas,
+.game-layout:-webkit-full-screen #gameCanvas {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+}
+
+.game-layout:fullscreen .game-sidebar,
+.game-layout:-webkit-full-screen .game-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+}
+
+.game-layout:fullscreen .bird-library,
+.game-layout:-webkit-full-screen .bird-library,
+.game-stage-card:fullscreen .bird-library,
+.game-stage-card:-webkit-full-screen .bird-library,
+.game-layout:fullscreen .hint-bar,
+.game-layout:-webkit-full-screen .hint-bar,
+.game-stage-card:fullscreen .hint-bar,
+.game-stage-card:-webkit-full-screen .hint-bar {
+    display: none;
+}
+
 .game-stage-card:fullscreen,
 .game-stage-card:-webkit-full-screen {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: stretch;
     width: 100vw;
+    width: 100dvw;
     height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: 12px;
     border-radius: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.82) rgba(15, 23, 42, 0.45);
     background: linear-gradient(180deg, #020617, #0f172a);
+}
+
+.game-stage-card:fullscreen::-webkit-scrollbar,
+.game-stage-card:-webkit-full-screen::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.game-stage-card:fullscreen::-webkit-scrollbar-track,
+.game-stage-card:-webkit-full-screen::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.game-stage-card:fullscreen::-webkit-scrollbar-thumb,
+.game-stage-card:-webkit-full-screen::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(15, 23, 42, 0.45);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #38bdf8, #a78bfa);
 }
 
 .game-stage-card:fullscreen #gameCanvas,
 .game-stage-card:-webkit-full-screen #gameCanvas {
     width: 100%;
     max-width: none;
-    max-height: calc(100vh - 92px);
+    max-height: none;
     object-fit: contain;
+}
+
+html.fullscreen-scroll-page,
+body.fullscreen-scroll-page {
+    min-height: 101vh;
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+    scrollbar-gutter: stable both-edges;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(56, 189, 248, 0.82) rgba(15, 23, 42, 0.45);
+}
+
+html.fullscreen-scroll-page::-webkit-scrollbar,
+body.fullscreen-scroll-page::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+html.fullscreen-scroll-page::-webkit-scrollbar-track,
+body.fullscreen-scroll-page::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+html.fullscreen-scroll-page::-webkit-scrollbar-thumb,
+body.fullscreen-scroll-page::-webkit-scrollbar-thumb {
+    border: 2px solid rgba(15, 23, 42, 0.45);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #38bdf8, #a78bfa);
+}
+
+body.mobile-fullscreen {
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen,
+body.mobile-fullscreen .game-layout:-webkit-full-screen {
+    grid-template-columns: minmax(720px, 1fr) 280px;
+    gap: 10px;
+    padding: 8px;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .game-stage-card,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .game-stage-card,
+body.mobile-fullscreen .game-stage-card:fullscreen,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen {
+    padding: 8px;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .stage-toolbar,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .stage-toolbar,
+body.mobile-fullscreen .game-stage-card:fullscreen .stage-toolbar,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .stage-toolbar {
+    grid-template-columns: minmax(150px, 1fr) auto auto;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .level-picker,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .level-picker,
+body.mobile-fullscreen .game-stage-card:fullscreen .level-picker,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .level-picker {
+    grid-column: auto;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .level-picker select,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .level-picker select,
+body.mobile-fullscreen .game-layout:fullscreen .mini-btn,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .mini-btn,
+body.mobile-fullscreen .game-stage-card:fullscreen .level-picker select,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .level-picker select,
+body.mobile-fullscreen .game-stage-card:fullscreen .mini-btn,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .mini-btn {
+    min-height: 34px;
+    font-size: 12px;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .hint-bar,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .hint-bar,
+body.mobile-fullscreen .game-stage-card:fullscreen .hint-bar,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .hint-bar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+}
+
+body.mobile-fullscreen .game-layout:fullscreen .bird-library,
+body.mobile-fullscreen .game-layout:-webkit-full-screen .bird-library,
+body.mobile-fullscreen .game-stage-card:fullscreen .bird-library,
+body.mobile-fullscreen .game-stage-card:-webkit-full-screen .bird-library {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(120px, 1fr));
+    max-height: 132px;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+body.force-landscape .game-layout:fullscreen,
+body.force-landscape .game-layout:-webkit-full-screen,
+body.force-landscape .game-stage-card:fullscreen,
+body.force-landscape .game-stage-card:-webkit-full-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100vh;
+    width: 100dvh;
+    height: 100vw;
+    height: 100dvw;
+    min-height: 100vw;
+    min-height: 100dvw;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transform-origin: center center;
 }
 
 .hint-bar {
